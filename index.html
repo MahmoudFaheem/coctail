@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COCTAIL: COVID19 Clinical Trial And Intervention Literature</title>
+    <title>COCTAIL: COVID-19 Clinical Trial And Intervention Literature</title>
     <style>
-        /* Fused Style Rules From header.php, index.php & footer.php */
+        /* Exact CSS properties extracted directly from index.php & header.php */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #FAF9F6;
-            padding-bottom: 100px; /* Space to completely clear the fixed footer */
+            padding-bottom: 100px; /* Fully clears fixed footer overlap */
         }
 
         .header {
             background-color: #FAF9F6;
             color: #B22222;
             padding: 40px 0;
-            margin-top: -30px;
+            margin-top: -30px; /* Pulls header up exactly like index.php */
             text-align: center;
         }
 
@@ -29,18 +29,6 @@
             line-height: 1;
         }
 
-        .header h2 {
-            text-align: center; 
-            line-height: 0.4;
-            font-size: 24px;
-        }
-
-        .header h3 {
-            text-align: center; 
-            line-height: 1;
-            font-size: 18px;
-        }
-
         .header a {
             color: inherit;
             text-decoration: none;
@@ -49,8 +37,7 @@
         .search-container {
             position: relative;
             text-align: center;
-            margin-top: -30px;
-            margin-bottom: 20px;
+            margin-top: -30px; /* Tightly aligns search container with header */
         }
 
         .search-container select {
@@ -60,6 +47,39 @@
             font-size: 16px;
             border-radius: 4px;
             border: 1px solid #ccc;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            width: calc(40% + 2px);
+            max-height: 150px;
+            overflow-y: auto;
+            border-radius: 4px;
+            padding: 5px;
+            top: calc(100% + 5px);
+            left: 50%;
+            transform: translateX(-50%);
+            box-sizing: border-box;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .show {
+            display: block;
         }
 
         .content {
@@ -84,37 +104,23 @@
             width: 100%;
         }
 
-        /* Dynamic Search Results Container */
-        #results-container {
-            max-width: 1100px;
-            margin: 30px auto;
-            overflow: auto;
-            padding: 0 20px;
-        }
-
-        .result-card {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background-color: #f2f2f2;
-            overflow-x: auto;
-            font-family: "Times New Roman", Times, serif;
-            font-size: 16px;
-            text-align: left;
-        }
-
-        .result-title {
-            text-align: center;
+        .panel-heading h2 {
             font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-family: Arial, serif;
+            margin: 0;
         }
 
-        .result-item {
-            font-size: 17px;
-            margin-bottom: 5px;
+        .panel-heading p {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        .panel-heading em {
+            font-style: italic;
+            color: #000000;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
         }
 
         .action-button {
@@ -125,7 +131,11 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            margin-left: 5px;
+            margin-right: 10px;
+        }
+
+        .action-button:last-child {
+            margin-right: 0;
         }
 
         .action-button:hover {
@@ -136,8 +146,7 @@
             background-color: #f2f2f2;
             padding: 20px;
             border-radius: 8px;
-            margin: 20px auto;
-            max-width: 560px;
+            margin-top: 30px;
             text-align: center;
         }
 
@@ -145,8 +154,9 @@
             color: #333;
         }
 
+        /* Fixed Footer styling from footer.php */
         .footer {
-            background-color: #333333;
+            background-color: #333333; 
             color: white;
             padding: 20px 0;
             text-align: center;
@@ -154,7 +164,7 @@
             width: 100%;
             bottom: 0;
             left: 0;
-            z-index: 999;
+            z-index: 1000;
         }
 
         .footer p {
@@ -171,15 +181,22 @@
             text-decoration: underline;
         }
 
+        /* Results Outer Box layout from search.php */
+        .search-results-wrapper {
+            max-width: 1100px; 
+            margin: 50px auto; 
+            overflow: auto;
+            padding: 0 20px;
+        }
+
         .status-msg {
             text-align: center;
             font-family: Arial, sans-serif;
-            color: #b22222;
+            color: #B22222;
             font-weight: bold;
-            margin: 15px 0;
+            margin-top: 15px;
         }
 
-        /* Responsive Breakpoints from Original Files */
         @media (max-width: 768px) {
             .header h1 { font-size: 24px; }
             .header h2, .header h3 { font-size: 18px; }
@@ -196,23 +213,24 @@
     <div class="header">
         <a href="index.html">
             <img alt="COCTAIL Logo" src="images/coctail_logo.png" style="width: 400px;">
-            <h1>COVID RESOURCES @ HOST-PATHOGEN NETWORK</h1>
-            <h2><span style="color:#B22222;"><span style="font-family:Arial;">The <u>CO</u>VID-19 <u>C</u>linical <u>T</u>rial <u>A</u>nd <u>I</u>ntervention <u>L</u>iterature Hub</span></span></h2>
-            <h3><span style="font-family:Arial;">an <a href="http://egybio.net"><u>Egybio</u></a> project</span></h3>
+            <h1 style="line-height: 1;">COVID RESOURCES @ HOST-PATHOGEN NETWORK</h1>
+            <h2 style="text-align: center; line-height: 0.4;"><span style="color:#B22222;"><span style="font-family:Arial;">The <u>CO</u>VID-19 <u>C</u>linical <u>T</u>rial <u>A</u>nd <u>I</u>ntervention <u>L</u>iterature Hub</span></span></h2>
+            <h3 style="text-align: center; line-height: 1;"><span style="font-family:Arial;">an <a href="http://egybio.net"><u>Egybio</u></a> project</span></h3>
         </a>
     </div>
 
     <div class="search-container">
-        <form id="searchForm" onsubmit="return handleSearch(event)">
+        <form id="searchForm" onsubmit="return executeSearch(event)">
             <select name="interventionType" id="interventionType" required disabled>
                 <option value="" disabled selected>Loading Literature Database...</option>
             </select>
+            <div id="dropdown" class="dropdown-content"></div>
             <input type="submit" value="Search" class="action-button">
         </form>
-        <div id="status-display" class="status-msg">Connecting to repository...</div>
+        <div id="status-display" class="status-msg">Connecting to repository database...</div>
     </div>
 
-    <div id="results-container"></div>
+    <div id="results-container" class="search-results-wrapper"></div>
 
     <div class="content">
         <div class="overview-section">
@@ -245,20 +263,14 @@
                 <td style="text-align: center;"><img alt="Prof.RKA" src="images/Prof.RKA.jpg" style="height: 200px;" /></td>
             </tr>
             <tr>
-                <td style="text-align: center;"><br />
-                    <a href="https://www.linkedin.com/in/mahmoudfaheem/" target="_blank"><span style="font-family:arial,helvetica,sans-serif;">Mahmoud Faheem</span></a><br />&nbsp;
-                </td>
-                <td style="text-align: center;">
-                    <a href="https://www.linkedin.com/in/shaimaa-hegazy-3a63a3177/" target="_blank"><span style="font-family:arial,helvetica,sans-serif;">Shaimaa Hegazy</span></a>
-                </td>
-                <td style="text-align: center;">
-                    <span style="font-family:arial,helvetica,sans-serif;"><a href="http://egybio.net/people/rka.html" target="_blank">Ramy K. Aziz</a></span>
-                </td>
+                <td style="text-align: center;"><br /><a href="https://www.linkedin.com/in/mahmoudfaheem/" target="_blank"><span style="font-family:arial,helvetica,sans-serif;">Mahmoud Faheem</span></a><br />&nbsp;</td>
+                <td style="text-align: center;"><a href="https://www.linkedin.com/in/shaimaa-hegazy-3a63a3177/" target="_blank"><span style="font-family:arial,helvetica,sans-serif;">Shaimaa Hegazy</span></a></td>
+                <td style="text-align: center;"><span style="font-family:arial,helvetica,sans-serif;"><a href="http://egybio.net/people/rka.html" target="_blank">Ramy K. Aziz</a></span></td>
             </tr>
         </tbody>
     </table>
 
-    <div class="host-pathogen-section" style="margin-top: 20px;">
+    <div class="host-pathogen-section" style="margin-top: 20px; background-color: #f2f2f2; padding: 20px; border-radius: 8px; text-align: center;">
         <p style="margin-bottom: 10px;"><strong>&quot;Host Pathogen&quot; was founded in 2009 by:</strong></p>
         <ul style="list-style-type: none; padding: 0;">
             <li style="margin-bottom: 5px;"><strong>Prof. Malak Kotb, PhD</strong></li>
@@ -274,21 +286,22 @@
         document.getElementById('current-year').textContent = new Date().getFullYear();
         
         let coctailData = [];
+        let csvHeaders = [];
 
-        // Asynchronously fetch and parse csv file automatically upon boot
-        async function loadRepository() {
-            const statusText = document.getElementById('status-display');
-            const selectDropdown = document.getElementById('interventionType');
+        // Asynchronous structural data pipeline loader
+        async function bootApp() {
+            const statusLabel = document.getElementById('status-display');
+            const dropdownMenu = document.getElementById('interventionType');
             
             try {
                 const response = await fetch('coctail.csv');
-                if (!response.ok) throw new Error("Target storage object inaccessible.");
-                const rawData = await response.text();
+                if (!response.ok) throw new Error("Target sheet could not be mapped.");
+                const rawCSVText = await response.text();
                 
-                coctailData = parseData(rawData);
+                parseCSV(rawCSVText);
                 
-                statusText.textContent = ""; // Clear loader context message safely
-                selectDropdown.innerHTML = `
+                statusLabel.textContent = ""; // Erases loading status cleanly on success
+                dropdownMenu.innerHTML = `
                     <option value="" disabled selected>Search by the type of intervention</option>
                     <option value="Drug(s)">Drug(s)</option>
                     <option value="Vaccine">Vaccine</option>
@@ -298,110 +311,112 @@
                     <option value="Other">Other</option>
                     <option value="None/Observatory">None/Observatory</option>
                 `;
-                selectDropdown.disabled = false;
-            } catch (error) {
-                statusText.textContent = "Database sync failed. Verify coctail.csv is in your root folder.";
-                console.error(error);
+                dropdownMenu.disabled = false;
+            } catch (err) {
+                statusLabel.textContent = "Error mapping database file. Confirm coctail.csv matches execution directory.";
+                console.error(err);
             }
         }
 
-        // Compliant RFC-4180 parsing layer to process complex multiline fields
-        function parseData(text) {
+        // Compliant RFC-4180 loop to parse data while safely keeping structural row sequences intact
+        function parseCSV(text) {
             let lines = [];
-            let row = [""];
-            let inQuotes = false;
+            let currentField = [""];
+            let withinQuotes = false;
 
             for (let i = 0; i < text.length; i++) {
-                let c = text[i];
-                let next = text[i+1];
-                if (c === '"') {
-                    if (inQuotes && next === '"') { row[row.length - 1] += '"'; i++; } 
-                    else { inQuotes = !inQuotes; }
-                } else if (c === ',' && !inQuotes) {
-                    row.push('');
-                } else if ((c === '\r' || c === '\n') && !inQuotes) {
-                    if (c === '\r' && next === '\n') { i++; }
-                    lines.push(row);
-                    row = [''];
+                let char = text[i];
+                let nextChar = text[i+1];
+                if (char === '"') {
+                    if (withinQuotes && nextChar === '"') { currentField[currentField.length - 1] += '"'; i++; } 
+                    else { withinQuotes = !withinQuotes; }
+                } else if (char === ',' && !withinQuotes) {
+                    currentField.push('');
+                } else if ((char === '\r' || char === '\n') && !withinQuotes) {
+                    if (char === '\r' && nextChar === '\n') { i++; }
+                    lines.push(currentField);
+                    currentField = [''];
                 } else {
-                    row[row.length - 1] += c;
+                    currentField[currentField.length - 1] += char;
                 }
             }
-            if (row.length > 1 || row[0] !== '') lines.push(row);
+            if (currentField.length > 1 || currentField[0] !== '') lines.push(currentField);
 
-            const headings = lines[0].map(h => h.trim().replace(/[\n\r]/g, ' ').replace(/\s+/g, ' '));
+            // Extract headers and sanitize column strings cleanly
+            csvHeaders = lines[0].map(h => h.trim().replace(/[\n\r]/g, ' ').replace(/\s+/g, ' '));
 
-            return lines.slice(1).map(line => {
-                let entry = {};
-                headings.forEach((heading, index) => {
-                    let extractedValue = line[index] ? line[index].trim() : "";
-                    entry[heading] = extractedValue.replace(/\r$/, "");
+            coctailData = lines.slice(1).map(line => {
+                let rowObject = {};
+                csvHeaders.forEach((header, idx) => {
+                    let fieldVal = line[idx] ? line[idx].trim() : "";
+                    rowObject[header] = fieldVal.replace(/\r$/, "");
                 });
-                return entry;
+                return rowObject;
             }).filter(item => item["Publication Title"]);
         }
 
-        // Logic handler replicating search.php execution rules
-        function handleSearch(event) {
+        // Renders search output cards matching search.php precisely
+        function executeSearch(event) {
             event.preventDefault();
             
-            const selection = document.getElementById('interventionType').value;
-            const resultsBox = document.getElementById('results-container');
-            const statusText = document.getElementById('status-display');
+            const targetSelection = document.getElementById('interventionType').value;
+            const targetOutputBlock = document.getElementById('results-container');
+            const statusLabel = document.getElementById('status-display');
             
-            resultsBox.innerHTML = '';
-            statusText.textContent = '';
+            targetOutputBlock.innerHTML = '';
+            statusLabel.textContent = '';
 
-            if (!selection) {
+            if (!targetSelection) {
                 alert("Please select the type of intervention");
                 return false;
             }
 
-            // Case-insensitive inclusion matching matching the SQL LIKE rule
-            const matchedRows = coctailData.filter(item => {
-                const targetField = item["Type of intervention"] || "";
-                return targetField.toLowerCase().includes(selection.toLowerCase());
+            // Mimics SQL 'LIKE' behavior via case-insensitive lookup
+            const filteredRows = coctailData.filter(item => {
+                const typeData = item["Type of intervention"] || "";
+                return typeData.toLowerCase().includes(targetSelection.toLowerCase());
             });
 
-            if (matchedRows.length === 0) {
-                statusText.textContent = `No results found for '${selection}' in the 'Type of intervention' column.`;
+            if (filteredRows.length === 0) {
+                statusLabel.textContent = `No results found for '${targetSelection}' in the 'Type of intervention' column.`;
                 return false;
             }
 
-            // Construct structural output matching original search.php styles perfectly
-            let innerHTMLBuilder = '';
-            matchedRows.forEach(row => {
-                innerHTMLBuilder += '<div class="result-card">';
+            let inlineHTMLOutput = '';
+            
+            filteredRows.forEach(row => {
+                // Exact Card styling block injected verbatim from search.php loop
+                inlineHTMLOutput += '<div style="border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; background-color: #f2f2f2; overflow-x: auto; font-family: Times New Roman; font-size: 16px;">';
                 
-                // Prioritize 'Publication Title' rendering at top of the block
+                // 1. Force publication title directly onto the top element row
                 if (row["Publication Title"]) {
-                    innerHTMLBuilder += `<div class="result-title">${row["Publication Title"]}</div>`;
+                    inlineHTMLOutput += `<div style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 10px; font-family: Arial, serif;">${row["Publication Title"]}</div>`;
                 }
 
-                Object.keys(row).forEach(key => {
-                    if (key === "Publication Title") return;
+                // 2. Loop explicitly over csvHeaders to output every key in its exact structural layout sequence
+                csvHeaders.forEach(key => {
+                    if (key === "Publication Title") return; // Already rendered above
                     
-                    let visualKey = key.replace(/[\n\r]/g, ' ');
-                    let val = row[key] || 'N/A';
-
-                    if (visualKey === 'PMID') {
-                        innerHTMLBuilder += `<div class="result-item"><strong>${visualKey}:</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/${val}" target="_blank">${val}</a></div>`;
+                    let dataValue = row[key] || '';
+                    
+                    if (key === 'PMID') {
+                        inlineHTMLOutput += `<div style="font-size: 17px;"><strong>${key}:</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/${dataValue}" target="_blank">${dataValue}</a></div>`;
                     } else {
-                        innerHTMLBuilder += `<div class="result-item"><strong>${visualKey}:</strong> ${val}</div>`;
+                        inlineHTMLOutput += `<div style="font-size: 17px;"><strong>${key}:</strong> ${dataValue}</div>`;
                     }
                 });
 
-                innerHTMLBuilder += '</div>';
+                inlineHTMLOutput += '</div>';
             });
 
-            resultsBox.innerHTML = innerHTMLBuilder;
+            targetOutputBlock.innerHTML = inlineHTMLOutput;
             
-            // Auto scroll down directly to metrics interface window smoothly
-            resultsBox.scrollIntoView({ behavior: 'smooth' });
+            // Smoothly shifts viewpoint directly down to metrics result block instantly
+            targetOutputBlock.scrollIntoView({ behavior: 'smooth' });
             return false;
         }
 
-        window.addEventListener('DOMContentLoaded', loadRepository);
+        window.addEventListener('DOMContentLoaded', bootApp);
     </script>
 </body>
 </html>
