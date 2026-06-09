@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COCTAIL: COVID19 Clinical Trial And Intervention Literature</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FAF9F6;
+            padding-bottom: 80px;
+        }
+        .header {
+            background-color: #FAF9F6;
+            color: #B22222;
+            padding: 20px 10px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            cursor: pointer;
+        }
+        .search-container {
+            position: relative;
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+        .search-container select {
+            padding: 10px;
+            width: 80%;
+            max-width: 400px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        #results-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .result-card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f2f2f2;
+            overflow-x: auto;
+            font-family: "Times New Roman", serif;
+            font-size: 16px;
+        }
+        .result-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-family: Arial, sans-serif;
+        }
+        .result-item {
+            font-size: 17px;
+            margin-bottom: 5px;
+        }
+        .team-table {
+            margin: 40px auto;
+            width: 560px;
+            border-collapse: collapse;
+        }
+        .team-table img {
+            height: 200px;
+            border-radius: 4px;
+        }
+        .team-table td {
+            padding: 10px;
+            text-align: center;
+        }
+        .team-table a {
+            color: #0066cc;
+            text-decoration: none;
+            font-family: arial, helvetica, sans-serif;
+        }
+        .team-table a:hover {
+            text-decoration: underline;
+        }
+        .host-pathogen-section {
+            margin: 20px auto;
+            max-width: 560px;
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .host-pathogen-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .host-pathogen-section li {
+            margin-bottom: 5px;
+        }
+        .footer {
+            background-color: #333333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+        .footer p {
+            font-size: 16px;
+            margin: 0;
+        }
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .status-msg {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1 onclick="window.location.reload()">COCTAIL: COVID19 Clinical Trial And Intervention Literature</h1>
+    </div>
+
+    <div class="search-container">
+        <select id="interventionFilter" onchange="filterData()" disabled>
+            <option value="">-- Loading Data... --</option>
+        </select>
+    </div>
+
+    <div id="results-container">
+        <p class="status-msg" id="status">Fetching literature database...</p>
+    </div>
+
+    <table class="team-table" border="0" cellpadding="1" cellspacing="1">
+        <tbody>
+            <tr>
+                <td><img alt="Mahmoud" src="images/Mahmoud.jpg" /></td>
+                <td><img alt="Shaimaa" src="images/Shaimaa.jpg" /></td>
+                <td><img alt="Prof.RKA" src="images/Prof.RKA.jpg" /></td>
+            </tr>
+            <tr>
+                <td><a href="https://www.linkedin.com/in/mahmoudfaheem/" target="_blank">Mahmoud Faheem</a></td>
+                <td><a href="https://www.linkedin.com/in/shaimaa-hegazy-3a63a3177/" target="_blank">Shaimaa Hegazy</a></td>
+                <td><a href="http://egybio.net/people/rka.html" target="_blank">Ramy K. Aziz</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="host-pathogen-section">
+        <p><strong>"Host Pathogen" was founded in 2009 by:</strong></p>
+        <ul>
+            <li><strong>Prof. Malak Kotb, PhD</strong></li>
+            <li><strong>Prof. Ramy K. Aziz, PhD</strong></li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        <p>&copy; <span id="current-year"></span> COCTAIL: COVID19 Clinical Trial And Intervention Literature | All rights reserved | Designed by <a href="http://egybio.net" target="_blank">Egybio</a></p>
+    </div>
+
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        let coctailData = [];
+
+        // Fetch and parse the CSV file dynamically
+        async function initApp() {
+            const statusEl = document.getElementById('status');
+            const filterSelect = document.getElementById('interventionFilter');
+            try {
+                const response = await fetch('coctail.csv');
+                if (!response.ok) throw new Error("Could not find coctail.csv");
+                const rawText = await response.text();
+                
+                coctailData = parseCSV(rawText);
+                
+                statusEl.textContent = "Database loaded successfully. Select an intervention type above.";
+                filterSelect.innerHTML = `
+                    <option value="">-- Select Type of Intervention --</option>
+                    <option value="Drug(s)">Drug(s)</option>
+                    <option value="Vaccine">Vaccine</option>
+                    <option value="Plasma">Plasma</option>
+                    <option value="IVIG">IVIG</option>
+                    <option value="Oxygen support">Oxygen support</option>
+                    <option value="Other">Other</option>
+                    <option value="None/Observatory">None/Observatory</option>
+                `;
+                filterSelect.disabled = false;
+            } catch (err) {
+                statusEl.textContent = "Error loading database files. Please ensure coctail.csv is in the root folder.";
+                console.error(err);
+            }
+        }
+
+        // Clean CSV parsing logic to handle complex strings and multiline records safely
+        function parseCSV(text) {
+            let lines = [];
+            let row = [""];
+            let inQuotes = false;
+
+            for (let i = 0; i < text.length; i++) {
+                let c = text[i];
+                let next = text[i+1];
+                if (c === '"') {
+                    if (inQuotes && next === '"') { row[row.length - 1] += '"'; i++; } 
+                    else { inQuotes = !inQuotes; }
+                } else if (c === ',' && !inQuotes) {
+                    row.push('');
+                } else if ((c === '\r' || c === '\n') && !inQuotes) {
+                    if (c === '\r' && next === '\n') { i++; }
+                    lines.push(row);
+                    row = [''];
+                } else {
+                    row[row.length - 1] += c;
+                }
+            }
+            if (row.length > 1 || row[0] !== '') lines.push(row);
+
+            const rawHeaders = lines[0];
+            // Format headers to clean up unexpected spaces or literal newlines inside CSV columns
+            const headers = rawHeaders.map(h => h.trim().replace(/[\n\r]/g, ' ').replace(/\s+/g, ' '));
+
+            return lines.slice(1).map(line => {
+                let obj = {};
+                headers.forEach((header, idx) => {
+                    let val = line[idx] ? line[idx].trim() : "";
+                    // Clean trailing carriage returns from structural fields
+                    obj[header] = val.replace(/\r$/, "");
+                });
+                return obj;
+            }).filter(item => item["Publication Title"]);
+        }
+
+        function filterData() {
+            const selectedValue = document.getElementById('interventionFilter').value;
+            const container = document.getElementById('results-container');
+            container.innerHTML = '';
+
+            if (!selectedValue) {
+                container.innerHTML = '<p class="status-msg">Select an intervention type above.</p>';
+                return;
+            }
+
+            const filtered = coctailData.filter(item => item["Type of intervention"] === selectedValue);
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<p class="status-msg">No records found for this intervention type.</p>';
+                return;
+            }
+
+            filtered.forEach(row => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+
+                if (row["Publication Title"]) {
+                    const titleDiv = document.createElement('div');
+                    titleDiv.className = 'result-title';
+                    titleDiv.textContent = row["Publication Title"];
+                    card.appendChild(titleDiv);
+                }
+
+                Object.keys(row).forEach(key => {
+                    if (key === "Publication Title") return;
+
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'result-item';
+
+                    // Standardizing field cleanup for display keys
+                    let displayKey = key.replace(/[\n\r]/g, ' ');
+
+                    if (displayKey === 'PMID') {
+                        itemDiv.innerHTML = `<strong>${displayKey}:</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/${row[key]}" target="_blank">${row[key]}</a>`;
+                    } else {
+                        itemDiv.innerHTML = `<strong>${displayKey}:</strong> ${row[key] || 'N/A'}`;
+                    }
+                    card.appendChild(itemDiv);
+                });
+
+                container.appendChild(card);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
