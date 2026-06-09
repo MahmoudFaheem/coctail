@@ -5,43 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COCTAIL: COVID19 Clinical Trial And Intervention Literature</title>
     <style>
+        /* Fused Style Rules From header.php, index.php & footer.php */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #FAF9F6;
-            padding-bottom: 80px;
+            padding-bottom: 100px; /* Space to completely clear the fixed footer */
         }
+
         .header {
             background-color: #FAF9F6;
             color: #B22222;
-            padding: 20px 10px;
+            padding: 40px 0;
+            margin-top: -30px;
             text-align: center;
         }
+
         .header h1 {
-            font-size: 24px;
+            font-size: 32px;
             margin: 0;
             cursor: pointer;
+            line-height: 1;
         }
+
+        .header h2 {
+            text-align: center; 
+            line-height: 0.4;
+            font-size: 24px;
+        }
+
+        .header h3 {
+            text-align: center; 
+            line-height: 1;
+            font-size: 18px;
+        }
+
+        .header a {
+            color: inherit;
+            text-decoration: none;
+        }        
+
         .search-container {
             position: relative;
             text-align: center;
-            margin-top: 10px;
-            margin-bottom: 30px;
+            margin-top: -30px;
+            margin-bottom: 20px;
         }
+
         .search-container select {
             padding: 10px;
             width: 80%;
-            max-width: 400px;
+            max-width: 300px;
             font-size: 16px;
             border-radius: 4px;
             border: 1px solid #ccc;
         }
+
+        .content {
+            max-width: 100%;
+            width: 90%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            text-align: justify;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+
+        .overview-section {
+            margin-bottom: 30px;
+        }
+
+        .overview-content {
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: justify;
+            width: 100%;
+        }
+
+        /* Dynamic Search Results Container */
         #results-container {
             max-width: 1100px;
             margin: 30px auto;
+            overflow: auto;
             padding: 0 20px;
         }
+
         .result-card {
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -49,56 +99,52 @@
             margin-bottom: 20px;
             background-color: #f2f2f2;
             overflow-x: auto;
-            font-family: "Times New Roman", serif;
+            font-family: "Times New Roman", Times, serif;
             font-size: 16px;
+            text-align: left;
         }
+
         .result-title {
             text-align: center;
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 10px;
-            font-family: Arial, sans-serif;
+            font-family: Arial, serif;
         }
+
         .result-item {
             font-size: 17px;
             margin-bottom: 5px;
         }
-        .team-table {
-            margin: 40px auto;
-            width: 560px;
-            border-collapse: collapse;
-        }
-        .team-table img {
-            height: 200px;
+
+        .action-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
             border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 5px;
         }
-        .team-table td {
-            padding: 10px;
-            text-align: center;
+
+        .action-button:hover {
+            background-color: #0B5BD7;
         }
-        .team-table a {
-            color: #0066cc;
-            text-decoration: none;
-            font-family: arial, helvetica, sans-serif;
-        }
-        .team-table a:hover {
-            text-decoration: underline;
-        }
+
         .host-pathogen-section {
-            margin: 20px auto;
-            max-width: 560px;
             background-color: #f2f2f2;
             padding: 20px;
             border-radius: 8px;
+            margin: 20px auto;
+            max-width: 560px;
             text-align: center;
         }
-        .host-pathogen-section ul {
-            list-style-type: none;
-            padding: 0;
+
+        .host-pathogen-section strong {
+            color: #333;
         }
-        .host-pathogen-section li {
-            margin-bottom: 5px;
-        }
+
         .footer {
             background-color: #333333;
             color: white;
@@ -108,60 +154,114 @@
             width: 100%;
             bottom: 0;
             left: 0;
+            z-index: 999;
         }
+
         .footer p {
             font-size: 16px;
             margin: 0;
         }
+
         .footer a {
             color: #fff;
             text-decoration: none;
         }
+
         .footer a:hover {
             text-decoration: underline;
         }
+
         .status-msg {
             text-align: center;
             font-family: Arial, sans-serif;
-            color: #666;
+            color: #b22222;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        /* Responsive Breakpoints from Original Files */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 24px; }
+            .header h2, .header h3 { font-size: 18px; }
+            .header img { width: 90%; max-width: 300px; }
+            .search-container select { width: 90%; max-width: none; }
+            .content { width: 95%; }
+            table { width: 100% !important; max-width: none; }
+            img { width: 100% !important; max-width: none; height: auto !important; }
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1 onclick="window.location.reload()">COCTAIL: COVID19 Clinical Trial And Intervention Literature</h1>
+        <a href="index.html">
+            <img alt="COCTAIL Logo" src="images/coctail_logo.png" style="width: 400px;">
+            <h1>COVID RESOURCES @ HOST-PATHOGEN NETWORK</h1>
+            <h2><span style="color:#B22222;"><span style="font-family:Arial;">The <u>CO</u>VID-19 <u>C</u>linical <u>T</u>rial <u>A</u>nd <u>I</u>ntervention <u>L</u>iterature Hub</span></span></h2>
+            <h3><span style="font-family:Arial;">an <a href="http://egybio.net"><u>Egybio</u></a> project</span></h3>
+        </a>
     </div>
 
     <div class="search-container">
-        <select id="interventionFilter" onchange="filterData()" disabled>
-            <option value="">-- Loading Data... --</option>
-        </select>
+        <form id="searchForm" onsubmit="return handleSearch(event)">
+            <select name="interventionType" id="interventionType" required disabled>
+                <option value="" disabled selected>Loading Literature Database...</option>
+            </select>
+            <input type="submit" value="Search" class="action-button">
+        </form>
+        <div id="status-display" class="status-msg">Connecting to repository...</div>
     </div>
 
-    <div id="results-container">
-        <p class="status-msg" id="status">Fetching literature database...</p>
+    <div id="results-container"></div>
+
+    <div class="content">
+        <div class="overview-section">
+            <h2>The COCTAIL Repository</h2>
+            <div class="overview-content">
+                <p>The COVID-19 Clinical Trial And Intervention Literature Hub, known as COCTAIL, is an active database comprising an evidence table that includes papers extracted from PubMed. These papers report on clinical and epidemiological studies, including clinical trials, case reports, or meta-analyses, related to the COVID-19 pandemic.</p>
+            </div>
+        </div>
     </div>
 
-    <table class="team-table" border="0" cellpadding="1" cellspacing="1">
+    <table align="center" cellpadding="1" cellspacing="1" style="width: 560px;">
         <tbody>
             <tr>
-                <td><img alt="Mahmoud" src="images/Mahmoud.jpg" /></td>
-                <td><img alt="Shaimaa" src="images/Shaimaa.jpg" /></td>
-                <td><img alt="Prof.RKA" src="images/Prof.RKA.jpg" /></td>
-            </tr>
-            <tr>
-                <td><a href="https://www.linkedin.com/in/mahmoudfaheem/" target="_blank">Mahmoud Faheem</a></td>
-                <td><a href="https://www.linkedin.com/in/shaimaa-hegazy-3a63a3177/" target="_blank">Shaimaa Hegazy</a></td>
-                <td><a href="http://egybio.net/people/rka.html" target="_blank">Ramy K. Aziz</a></td>
+                <td style="text-align: center;">
+                    <a href="https://host-pathogen.net/covid/coctail.html" target="_blank">
+                        <img alt="Keywords_Cloud" src="images/Keywords_cloud.png" style="width: 548px;" />
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>
 
-    <div class="host-pathogen-section">
-        <p><strong>"Host Pathogen" was founded in 2009 by:</strong></p>
-        <ul>
-            <li><strong>Prof. Malak Kotb, PhD</strong></li>
+    <p style="text-align: center;"><strong><span style="font-family:arial,helvetica,sans-serif;">Curators</span></strong></p>
+
+    <table align="center" border="1" cellpadding="0" cellspacing="1" style="width:560px;">
+        <tbody>
+            <tr>
+                <td style="text-align: center;"><img alt="Mahmoud" src="images/Mahmoud.jpg" style="height: 200px;" /></td>
+                <td style="text-align: center;"><img alt="Shaimaa" src="images/Shaimaa.jpg" style="height: 200px;" /></td>
+                <td style="text-align: center;"><img alt="Prof.RKA" src="images/Prof.RKA.jpg" style="height: 200px;" /></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><br />
+                    <a href="https://www.linkedin.com/in/mahmoudfaheem/" target="_blank"><span style="font-family:arial,helvetica,sans-serif;">Mahmoud Faheem</span></a><br />&nbsp;
+                </td>
+                <td style="text-align: center;">
+                    <a href="https://www.linkedin.com/in/shaimaa-hegazy-3a63a3177/" target="_blank"><span style="font-family:arial,helvetica,sans-serif;">Shaimaa Hegazy</span></a>
+                </td>
+                <td style="text-align: center;">
+                    <span style="font-family:arial,helvetica,sans-serif;"><a href="http://egybio.net/people/rka.html" target="_blank">Ramy K. Aziz</a></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="host-pathogen-section" style="margin-top: 20px;">
+        <p style="margin-bottom: 10px;"><strong>&quot;Host Pathogen&quot; was founded in 2009 by:</strong></p>
+        <ul style="list-style-type: none; padding: 0;">
+            <li style="margin-bottom: 5px;"><strong>Prof. Malak Kotb, PhD</strong></li>
             <li><strong>Prof. Ramy K. Aziz, PhD</strong></li>
         </ul>
     </div>
@@ -175,20 +275,21 @@
         
         let coctailData = [];
 
-        // Fetch and parse the CSV file dynamically
-        async function initApp() {
-            const statusEl = document.getElementById('status');
-            const filterSelect = document.getElementById('interventionFilter');
+        // Asynchronously fetch and parse csv file automatically upon boot
+        async function loadRepository() {
+            const statusText = document.getElementById('status-display');
+            const selectDropdown = document.getElementById('interventionType');
+            
             try {
                 const response = await fetch('coctail.csv');
-                if (!response.ok) throw new Error("Could not find coctail.csv");
-                const rawText = await response.text();
+                if (!response.ok) throw new Error("Target storage object inaccessible.");
+                const rawData = await response.text();
                 
-                coctailData = parseCSV(rawText);
+                coctailData = parseData(rawData);
                 
-                statusEl.textContent = "Database loaded successfully. Select an intervention type above.";
-                filterSelect.innerHTML = `
-                    <option value="">-- Select Type of Intervention --</option>
+                statusText.textContent = ""; // Clear loader context message safely
+                selectDropdown.innerHTML = `
+                    <option value="" disabled selected>Search by the type of intervention</option>
                     <option value="Drug(s)">Drug(s)</option>
                     <option value="Vaccine">Vaccine</option>
                     <option value="Plasma">Plasma</option>
@@ -197,15 +298,15 @@
                     <option value="Other">Other</option>
                     <option value="None/Observatory">None/Observatory</option>
                 `;
-                filterSelect.disabled = false;
-            } catch (err) {
-                statusEl.textContent = "Error loading database files. Please ensure coctail.csv is in the root folder.";
-                console.error(err);
+                selectDropdown.disabled = false;
+            } catch (error) {
+                statusText.textContent = "Database sync failed. Verify coctail.csv is in your root folder.";
+                console.error(error);
             }
         }
 
-        // Clean CSV parsing logic to handle complex strings and multiline records safely
-        function parseCSV(text) {
+        // Compliant RFC-4180 parsing layer to process complex multiline fields
+        function parseData(text) {
             let lines = [];
             let row = [""];
             let inQuotes = false;
@@ -228,71 +329,79 @@
             }
             if (row.length > 1 || row[0] !== '') lines.push(row);
 
-            const rawHeaders = lines[0];
-            // Format headers to clean up unexpected spaces or literal newlines inside CSV columns
-            const headers = rawHeaders.map(h => h.trim().replace(/[\n\r]/g, ' ').replace(/\s+/g, ' '));
+            const headings = lines[0].map(h => h.trim().replace(/[\n\r]/g, ' ').replace(/\s+/g, ' '));
 
             return lines.slice(1).map(line => {
-                let obj = {};
-                headers.forEach((header, idx) => {
-                    let val = line[idx] ? line[idx].trim() : "";
-                    // Clean trailing carriage returns from structural fields
-                    obj[header] = val.replace(/\r$/, "");
+                let entry = {};
+                headings.forEach((heading, index) => {
+                    let extractedValue = line[index] ? line[index].trim() : "";
+                    entry[heading] = extractedValue.replace(/\r$/, "");
                 });
-                return obj;
+                return entry;
             }).filter(item => item["Publication Title"]);
         }
 
-        function filterData() {
-            const selectedValue = document.getElementById('interventionFilter').value;
-            const container = document.getElementById('results-container');
-            container.innerHTML = '';
+        // Logic handler replicating search.php execution rules
+        function handleSearch(event) {
+            event.preventDefault();
+            
+            const selection = document.getElementById('interventionType').value;
+            const resultsBox = document.getElementById('results-container');
+            const statusText = document.getElementById('status-display');
+            
+            resultsBox.innerHTML = '';
+            statusText.textContent = '';
 
-            if (!selectedValue) {
-                container.innerHTML = '<p class="status-msg">Select an intervention type above.</p>';
-                return;
+            if (!selection) {
+                alert("Please select the type of intervention");
+                return false;
             }
 
-            const filtered = coctailData.filter(item => item["Type of intervention"] === selectedValue);
+            // Case-insensitive inclusion matching matching the SQL LIKE rule
+            const matchedRows = coctailData.filter(item => {
+                const targetField = item["Type of intervention"] || "";
+                return targetField.toLowerCase().includes(selection.toLowerCase());
+            });
 
-            if (filtered.length === 0) {
-                container.innerHTML = '<p class="status-msg">No records found for this intervention type.</p>';
-                return;
+            if (matchedRows.length === 0) {
+                statusText.textContent = `No results found for '${selection}' in the 'Type of intervention' column.`;
+                return false;
             }
 
-            filtered.forEach(row => {
-                const card = document.createElement('div');
-                card.className = 'result-card';
-
+            // Construct structural output matching original search.php styles perfectly
+            let innerHTMLBuilder = '';
+            matchedRows.forEach(row => {
+                innerHTMLBuilder += '<div class="result-card">';
+                
+                // Prioritize 'Publication Title' rendering at top of the block
                 if (row["Publication Title"]) {
-                    const titleDiv = document.createElement('div');
-                    titleDiv.className = 'result-title';
-                    titleDiv.textContent = row["Publication Title"];
-                    card.appendChild(titleDiv);
+                    innerHTMLBuilder += `<div class="result-title">${row["Publication Title"]}</div>`;
                 }
 
                 Object.keys(row).forEach(key => {
                     if (key === "Publication Title") return;
+                    
+                    let visualKey = key.replace(/[\n\r]/g, ' ');
+                    let val = row[key] || 'N/A';
 
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'result-item';
-
-                    // Standardizing field cleanup for display keys
-                    let displayKey = key.replace(/[\n\r]/g, ' ');
-
-                    if (displayKey === 'PMID') {
-                        itemDiv.innerHTML = `<strong>${displayKey}:</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/${row[key]}" target="_blank">${row[key]}</a>`;
+                    if (visualKey === 'PMID') {
+                        innerHTMLBuilder += `<div class="result-item"><strong>${visualKey}:</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/${val}" target="_blank">${val}</a></div>`;
                     } else {
-                        itemDiv.innerHTML = `<strong>${displayKey}:</strong> ${row[key] || 'N/A'}`;
+                        innerHTMLBuilder += `<div class="result-item"><strong>${visualKey}:</strong> ${val}</div>`;
                     }
-                    card.appendChild(itemDiv);
                 });
 
-                container.appendChild(card);
+                innerHTMLBuilder += '</div>';
             });
+
+            resultsBox.innerHTML = innerHTMLBuilder;
+            
+            // Auto scroll down directly to metrics interface window smoothly
+            resultsBox.scrollIntoView({ behavior: 'smooth' });
+            return false;
         }
 
-        window.addEventListener('DOMContentLoaded', initApp);
+        window.addEventListener('DOMContentLoaded', loadRepository);
     </script>
 </body>
 </html>
