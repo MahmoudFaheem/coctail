@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COCTAIL: COVID-19 Clinical Trial And Intervention Literature</title>
     <style>
-        /* Exact CSS properties extracted directly from index.php & header.php */
+        /* Exact CSS properties optimized for both Desktop and Fluid Mobile Views */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #FAF9F6;
-            padding-bottom: 100px; /* Fully clears fixed footer overlap */
+            padding-bottom: 120px; /* Fully clears fixed footer overlap across all devices */
         }
 
         .header {
             background-color: #FAF9F6;
             color: #B22222;
-            padding: 40px 0;
+            padding: 40px 15px;
             margin-top: -30px; /* Pulls header up exactly like index.php */
             text-align: center;
         }
@@ -26,7 +26,13 @@
             font-size: 32px;
             margin: 0;
             cursor: pointer;
-            line-height: 1;
+            line-height: 1.2;
+        }
+
+        .header h2 {
+            text-align: center;
+            line-height: 1.4; /* Adjusted from tight 0.4 to prevent text smashing on text wrapping */
+            margin: 10px 0;
         }
 
         .header a {
@@ -37,7 +43,8 @@
         .search-container {
             position: relative;
             text-align: center;
-            margin-top: -30px; /* Tightly aligns search container with header */
+            margin-top: -20px; /* Tightly aligns search container with header banner space */
+            padding: 0 15px;
         }
 
         .search-container select {
@@ -47,6 +54,7 @@
             font-size: 16px;
             border-radius: 4px;
             border: 1px solid #ccc;
+            box-sizing: border-box;
         }
 
         .dropdown-content {
@@ -91,6 +99,7 @@
             border-radius: 8px;
             text-align: justify;
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
 
         .overview-section {
@@ -142,12 +151,50 @@
             background-color: #0B5BD7;
         }
 
+        /* Responsive Curator Grid System */
+        .curators-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .curator-card {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+            flex: 1;
+            max-width: 180px;
+            box-sizing: border-box;
+        }
+
+        .curator-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .curator-name {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            margin-top: 10px;
+            display: block;
+        }
+
         .host-pathogen-section {
             background-color: #f2f2f2;
             padding: 20px;
             border-radius: 8px;
-            margin-top: 30px;
+            margin: 30px auto 0 auto;
             text-align: center;
+            max-width: 600px;
+            width: calc(100% - 30px);
+            box-sizing: border-box;
         }
 
         .host-pathogen-section strong {
@@ -170,6 +217,7 @@
         .footer p {
             font-size: 16px;
             margin: 0;
+            padding: 0 15px;
         }
 
         .footer a {
@@ -187,6 +235,7 @@
             margin: 50px auto; 
             overflow: auto;
             padding: 0 20px;
+            box-sizing: border-box;
         }
 
         .status-msg {
@@ -197,14 +246,36 @@
             margin-top: 15px;
         }
 
+        /* ==========================================================================
+           MOBILE WEBKIT SCREEN RESPONSIVENESS OVERRIDES
+           ========================================================================== */
         @media (max-width: 768px) {
             .header h1 { font-size: 24px; }
-            .header h2, .header h3 { font-size: 18px; }
-            .header img { width: 90%; max-width: 300px; }
-            .search-container select { width: 90%; max-width: none; }
-            .content { width: 95%; }
-            table { width: 100% !important; max-width: none; }
-            img { width: 100% !important; max-width: none; height: auto !important; }
+            .header h2 { font-size: 16px; }
+            .header h3 { font-size: 14px; }
+            .header img { width: 100%; max-width: 300px; height: auto; }
+            
+            .search-container form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+            .search-container select { width: 100%; max-width: none; }
+            .search-container .action-button { width: 100%; margin-right: 0; }
+            
+            .content { width: 95%; padding: 15px; }
+            
+            /* Stacks curator cards perfectly vertical to protect names from mixing up */
+            .curators-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            .curator-card {
+                width: 100%;
+                max-width: 280px;
+            }
         }
     </style>
 </head>
@@ -212,10 +283,10 @@
 
     <div class="header">
         <a href="index.html">
-            <img alt="COCTAIL Logo" src="images/coctail_logo.png" style="width: 400px;">
-            <h1 style="line-height: 1;">COVID RESOURCES @ HOST-PATHOGEN NETWORK</h1>
-            <h2 style="text-align: center; line-height: 0.4;"><span style="color:#B22222;"><span style="font-family:Arial;">The <u>CO</u>VID-19 <u>C</u>linical <u>T</u>rial <u>A</u>nd <u>I</u>ntervention <u>L</u>iterature Hub</span></span></h2>
-            <h3 style="text-align: center; line-height: 1;"><span style="font-family:Arial;">an <a href="http://egybio.net"><u>Egybio</u></a> project</span></h3>
+            <img alt="COCTAIL Logo" src="images/coctail_logo.png">
+            <h1>COVID RESOURCES @ HOST-PATHOGEN NETWORK</h1>
+            <h2><span style="color:#B22222;"><span style="font-family:Arial; font-weight: normal;">The <u>CO</u>VID-19 <u>C</u>linical <u>T</u>rial <u>A</u>nd <u>I</u>ntervention <u>L</u>iterature Hub</span></span></h2>
+            <h3><span style="font-family:Arial; font-weight: normal;">an <a href="http://egybio.net"><u>Egybio</u></a> project</span></h3>
         </a>
     </div>
 
@@ -241,38 +312,32 @@
         </div>
     </div>
 
-    <table align="center" cellpadding="1" cellspacing="1" style="width: 560px;">
-        <tbody>
-            <tr>
-                <td style="text-align: center;">
-                    <a href="https://host-pathogen.net/covid/coctail.html" target="_blank">
-                        <img alt="Keywords_Cloud" src="images/Keywords_cloud.png" style="width: 548px;" />
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div style="max-width: 560px; margin: 20px auto; text-align: center; padding: 0 15px;">
+        <a href="https://host-pathogen.net/covid/coctail.html" target="_blank">
+            <img alt="Keywords_Cloud" src="images/Keywords_cloud.png" style="width: 100%; max-width: 548px; height: auto;" />
+        </a>
+    </div>
 
-    <p style="text-align: center;"><strong><span style="font-family:arial,helvetica,sans-serif;">Curators</span></strong></p>
+    <p style="text-align: center; margin-bottom: 5px;"><strong><span style="font-family:arial,helvetica,sans-serif; font-size: 16px;">Curators</span></strong></p>
 
-    <table align="center" border="1" cellpadding="0" cellspacing="1" style="width:560px;">
-        <tbody>
-            <tr>
-                <td style="text-align: center;"><img alt="Mahmoud" src="images/Mahmoud.jpg" style="height: 200px;" /></td>
-                <td style="text-align: center;"><img alt="Shaimaa" src="images/Shaimaa.jpg" style="height: 200px;" /></td>
-                <td style="text-align: center;"><img alt="Prof.RKA" src="images/Prof.RKA.jpg" style="height: 200px;" /></td>
-            </tr>
-            <tr>
-                <td style="text-align: center;"><br /><a href="https://www.linkedin.com/in/mahmoudfaheem/" target="_blank"><span style="font-family:arial,helvetica,sans-serif;">Mahmoud Faheem</span></a><br />&nbsp;</td>
-                <td style="text-align: center;"><a href="https://www.linkedin.com/in/shaimaa-hegazy-3a63a3177/" target="_blank"><span style="font-family:arial,helvetica,sans-serif;">Shaimaa Hegazy</span></a></td>
-                <td style="text-align: center;"><span style="font-family:arial,helvetica,sans-serif;"><a href="http://egybio.net/people/rka.html" target="_blank">Ramy K. Aziz</a></span></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="curators-container">
+        <div class="curator-card">
+            <img alt="Mahmoud" src="images/Mahmoud.jpg" />
+            <span class="curator-name"><a href="https://www.linkedin.com/in/mahmoudfaheem/" target="_blank">Mahmoud Faheem</a></span>
+        </div>
+        <div class="curator-card">
+            <img alt="Shaimaa" src="images/Shaimaa.jpg" />
+            <span class="curator-name"><a href="https://www.linkedin.com/in/shaimaa-hegazy-3a63a3177/" target="_blank">Shaimaa Hegazy</a></span>
+        </div>
+        <div class="curator-card">
+            <img alt="Prof.RKA" src="images/Prof.RKA.jpg" />
+            <span class="curator-name"><a href="http://egybio.net/people/rka.html" target="_blank">Ramy K. Aziz</a></span>
+        </div>
+    </div>
 
-    <div class="host-pathogen-section" style="margin-top: 20px; background-color: #f2f2f2; padding: 20px; border-radius: 8px; text-align: center;">
-        <p style="margin-bottom: 10px;"><strong>&quot;Host Pathogen&quot; was founded in 2009 by:</strong></p>
-        <ul style="list-style-type: none; padding: 0;">
+    <div class="host-pathogen-section">
+        <p style="margin: 0 0 10px 0;"><strong>&quot;Host Pathogen&quot; was founded in 2009 by:</strong></p>
+        <ul style="list-style-type: none; padding: 0; margin: 0;">
             <li style="margin-bottom: 5px;"><strong>Prof. Malak Kotb, PhD</strong></li>
             <li><strong>Prof. Ramy K. Aziz, PhD</strong></li>
         </ul>
@@ -288,7 +353,6 @@
         let coctailData = [];
         let csvHeaders = [];
 
-        // Asynchronous structural data pipeline loader
         async function bootApp() {
             const statusLabel = document.getElementById('status-display');
             const dropdownMenu = document.getElementById('interventionType');
@@ -300,7 +364,7 @@
                 
                 parseCSV(rawCSVText);
                 
-                statusLabel.textContent = ""; // Erases loading status cleanly on success
+                statusLabel.textContent = ""; 
                 dropdownMenu.innerHTML = `
                     <option value="" disabled selected>Search by the type of intervention</option>
                     <option value="Drug(s)">Drug(s)</option>
@@ -318,7 +382,6 @@
             }
         }
 
-        // Compliant RFC-4180 loop to parse data while safely keeping structural row sequences intact
         function parseCSV(text) {
             let lines = [];
             let currentField = [""];
@@ -342,7 +405,6 @@
             }
             if (currentField.length > 1 || currentField[0] !== '') lines.push(currentField);
 
-            // Extract headers and sanitize column strings cleanly
             csvHeaders = lines[0].map(h => h.trim().replace(/[\n\r]/g, ' ').replace(/\s+/g, ' '));
 
             coctailData = lines.slice(1).map(line => {
@@ -355,7 +417,6 @@
             }).filter(item => item["Publication Title"]);
         }
 
-        // Renders search output cards matching search.php precisely
         function executeSearch(event) {
             event.preventDefault();
             
@@ -371,7 +432,6 @@
                 return false;
             }
 
-            // Mimics SQL 'LIKE' behavior via case-insensitive lookup
             const filteredRows = coctailData.filter(item => {
                 const typeData = item["Type of intervention"] || "";
                 return typeData.toLowerCase().includes(targetSelection.toLowerCase());
@@ -385,24 +445,21 @@
             let inlineHTMLOutput = '';
             
             filteredRows.forEach(row => {
-                // Exact Card styling block injected verbatim from search.php loop
                 inlineHTMLOutput += '<div style="border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; background-color: #f2f2f2; overflow-x: auto; font-family: Times New Roman; font-size: 16px;">';
                 
-                // 1. Force publication title directly onto the top element row
                 if (row["Publication Title"]) {
-                    inlineHTMLOutput += `<div style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 10px; font-family: Arial, serif;">${row["Publication Title"]}</div>`;
+                    inlineHTMLOutput += `<div style="text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 10px; font-family: Arial, serif; line-height: 1.3;">${row["Publication Title"]}</div>`;
                 }
 
-                // 2. Loop explicitly over csvHeaders to output every key in its exact structural layout sequence
                 csvHeaders.forEach(key => {
-                    if (key === "Publication Title") return; // Already rendered above
+                    if (key === "Publication Title") return; 
                     
                     let dataValue = row[key] || '';
                     
                     if (key === 'PMID') {
-                        inlineHTMLOutput += `<div style="font-size: 17px;"><strong>${key}:</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/${dataValue}" target="_blank">${dataValue}</a></div>`;
+                        inlineHTMLOutput += `<div style="margin-bottom: 5px; font-size: 16px;"><strong>${key}:</strong> <a href="https://pubmed.ncbi.nlm.nih.gov/${dataValue}" target="_blank" style="color:#0066cc;">${dataValue}</a></div>`;
                     } else {
-                        inlineHTMLOutput += `<div style="font-size: 17px;"><strong>${key}:</strong> ${dataValue}</div>`;
+                        inlineHTMLOutput += `<div style="margin-bottom: 5px; font-size: 16px;"><strong>${key}:</strong> ${dataValue}</div>`;
                     }
                 });
 
@@ -410,8 +467,6 @@
             });
 
             targetOutputBlock.innerHTML = inlineHTMLOutput;
-            
-            // Smoothly shifts viewpoint directly down to metrics result block instantly
             targetOutputBlock.scrollIntoView({ behavior: 'smooth' });
             return false;
         }
