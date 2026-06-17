@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             background-color: #FAF9F6;
-            padding-bottom: 140px; /* Secure clearance space for the fixed footer on short landscape screens */
+            padding-bottom: 160px; /* Secure clearance space for the fixed footer on short landscape screens */
         }
 
         .header {
@@ -55,6 +55,7 @@
             margin-top: -10px; 
             padding: 0 20px;
             box-sizing: border-box;
+            z-index: 1000;
         }
 
         .search-container select {
@@ -219,6 +220,107 @@
             box-sizing: border-box;
         }
 
+        /* Premium Floating Collapsible Chat Widget Framework Layout */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 380px;
+            height: 500px;
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            z-index: 2000;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            transition: height 0.3s ease, width 0.3s ease, left 0.3s ease, right 0.3s ease;
+        }
+
+        .chat-widget.collapsed {
+            height: 45px; 
+        }
+
+        .chat-header {
+            background-color: #B22222; /* Custom matching deep crimson theme accent */
+            color: #ffffff;
+            padding: 14px 16px;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            background-color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            line-height: 1.45;
+        }
+
+        .message.user {
+            background-color: #B22222;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .message.bot {
+            background-color: #e2e8f0;
+            color: #1e293b;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .chat-input-area {
+            padding: 12px;
+            background-color: #ffffff;
+            border-top: 1px solid #cbd5e1;
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input-area input[type="text"] {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .chat-input-area button {
+            background-color: #B22222;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+
+        .chat-input-area button:hover {
+            background-color: #901a1a;
+        }
+
         /* Fixed Footer styling from footer.php */
         .footer {
             background-color: #333333; 
@@ -265,12 +367,23 @@
         }
 
         /* Orientation and Narrow Device Adaptation Layer */
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
             .search-container .action-button {
                 max-width: 100%;
             }
+            .curators-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
             .curator-card {
-                max-width: 100%; /* Spans full width on ultra-narrow portrait views */
+                max-width: 100%; 
+                width: 100%;
+            }
+            .chat-widget {
+                width: calc(100% - 40px);
+                right: 20px;
+                left: 20px;
             }
         }
     </style>
@@ -338,6 +451,20 @@
             <li style="margin-bottom: 5px;"><strong>Prof. Malak Kotb, PhD</strong></li>
             <li><strong>Prof. Ramy K. Aziz, PhD</strong></li>
         </ul>
+    </div>
+
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header" onclick="toggleChatWidget()">
+            <span>COCTAIL Assistant (Instant Retrieval)</span>
+            <span id="chatToggleIcon" style="font-size: 16px; font-weight: bold;">&minus;</span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">Hello! I am your real-time data search assistant. Ask me about specific COVID-19 clinical treatments, type "list vaccines", or enter an intervention type to fetch matching literature metrics instantly!</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Ask about clinical trials or studies...">
+            <button onclick="executeChatGeneration()">Send</button>
+        </div>
     </div>
 
     <div class="footer">
@@ -416,8 +543,13 @@
 
         function executeSearch(event) {
             event.preventDefault();
-            
             const targetSelection = document.getElementById('interventionType').value;
+            triggerDataSearchRender(targetSelection);
+            return false;
+        }
+
+        // Segmented core search layer to handle both manual form submissions and programmatic assistant triggers cleanly
+        function triggerDataSearchRender(targetSelection) {
             const targetOutputBlock = document.getElementById('results-container');
             const statusLabel = document.getElementById('status-display');
             
@@ -426,7 +558,7 @@
 
             if (!targetSelection) {
                 alert("Please select the type of intervention");
-                return false;
+                return;
             }
 
             const filteredRows = coctailData.filter(item => {
@@ -436,13 +568,12 @@
 
             if (filteredRows.length === 0) {
                 statusLabel.textContent = `No results found for '${targetSelection}' in the 'Type of intervention' column.`;
-                return false;
+                return;
             }
 
             let inlineHTMLOutput = '';
             
             filteredRows.forEach(row => {
-                // Responsive Display Cards: Added full width and adaptive margin controls
                 inlineHTMLOutput += '<div style="border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; background-color: #f2f2f2; overflow-x: auto; font-family: Times New Roman; font-size: 16px; width: 100%; box-sizing: border-box;">';
                 
                 if (row["Publication Title"]) {
@@ -466,8 +597,99 @@
 
             targetOutputBlock.innerHTML = inlineHTMLOutput;
             targetOutputBlock.scrollIntoView({ behavior: 'smooth' });
-            return false;
+            
+            // Notify the assistant about active matches programmatically
+            appendBotChatMessage(`Retrieved <strong>${filteredRows.length}</strong> evidence cards for the intervention category: <strong>${targetSelection}</strong>.`);
         }
+
+        /* --- EXCLUSIVE HIGH-SPEED CLIENT-SIDE COCTAIL RETRIEVAL ENGINE --- */
+        function appendUserChatMessage(text) {
+            const box = document.getElementById('chatMessages');
+            const msg = document.createElement('div'); msg.className = 'message user'; msg.textContent = text;
+            box.appendChild(msg); box.scrollTop = box.scrollHeight;
+        }
+
+        function appendBotChatMessage(htmlText) {
+            const box = document.getElementById('chatMessages');
+            const msg = document.createElement('div'); msg.className = 'message bot'; msg.innerHTML = htmlText;
+            box.appendChild(msg); box.scrollTop = box.scrollHeight;
+        }
+
+        function toggleChatWidget() {
+            const widgetNode = document.getElementById('chatWidget');
+            const iconNode = document.getElementById('chatToggleIcon');
+            const isCollapsed = widgetNode.classList.toggle('collapsed');
+            iconNode.innerHTML = isCollapsed ? '&#9650;' : '&minus;';
+        }
+
+        function executeChatGeneration() {
+            const inputField = document.getElementById('chatInput');
+            const rawUserQuery = inputField.value.trim();
+            if (!rawUserQuery) return;
+
+            appendUserChatMessage(rawUserQuery);
+            inputField.value = "";
+
+            const lowerQuery = rawUserQuery.toLowerCase();
+            let botAnswerHTML = "";
+            let determinedInterventionValue = "";
+
+            // Mapping keyword triggers to matched options in coctail.csv
+            if (lowerQuery.includes("drug") || lowerQuery.includes("medication") || lowerQuery.includes("therapy")) {
+                determinedInterventionValue = "Drug(s)";
+            } else if (lowerQuery.includes("vaccine") || lowerQuery.includes("immunization") || lowerQuery.includes("vax")) {
+                determinedInterventionValue = "Vaccine";
+            } else if (lowerQuery.includes("plasma") || lowerQuery.includes("convalescent")) {
+                determinedInterventionValue = "Plasma";
+            } else if (lowerQuery.includes("ivig") || lowerQuery.includes("immunoglobulin")) {
+                determinedInterventionValue = "IVIG";
+            } else if (lowerQuery.includes("oxygen") || lowerQuery.includes("ventilator") || lowerQuery.includes("support")) {
+                determinedInterventionValue = "Oxygen support";
+            } else if (lowerQuery.includes("observatory") || lowerQuery.includes("none")) {
+                determinedInterventionValue = "None/Observatory";
+            } else if (lowerQuery.includes("other")) {
+                determinedInterventionValue = "Other";
+            }
+
+            // Pattern Match 1: Handle queries regarding listing or filtering intervention sets
+            if (determinedInterventionValue) {
+                const totalMatches = coctailData.filter(item => (item["Type of intervention"] || "").toLowerCase().includes(determinedInterventionValue.toLowerCase()));
+                
+                botAnswerHTML = `I scanned the curation records instantly. Found <strong>${totalMatches.length} papers</strong> mapped under <strong>${determinedInterventionValue}</strong>.<br><br>` +
+                               `<em>I have dynamically filtered the main view portal to load these exact evidence cards above for you right now!</em>`;
+                
+                // Programmatically link back into view rendering routine
+                document.getElementById('interventionType').value = determinedInterventionValue;
+                triggerDataSearchRender(determinedInterventionValue);
+            }
+
+            // Pattern Match 2: Deep content keyword scanning falls back to search titles & journals
+            if (!botAnswerHTML) {
+                let textMatches = coctailData.filter(row => {
+                    return Object.values(row).some(val => String(val).toLowerCase().includes(lowerQuery));
+                });
+
+                if (textMatches.length > 0) {
+                    let uniqueTitles = textMatches.slice(0, 5);
+                    botAnswerHTML = `I searched text entries and extracted <strong>${textMatches.length} matching rows</strong>. Here are the top titles found:<br><br>` +
+                                   uniqueTitles.map(row => `• <strong>${row["Publication Title"]}</strong> (Intervention: <em>${row["Type of intervention"]}</em>)`).join('<br><br>');
+                }
+            }
+
+            // Fallback default message block
+            if (!botAnswerHTML) {
+                botAnswerHTML = `I scanned the COCTAIL matrix repository for "${rawUserQuery}" but couldn't locate an explicit cross-reference. Try typing "show drug treatments" or asking about "vaccine literature".`;
+            }
+
+            setTimeout(() => {
+                appendBotChatMessage(botAnswerHTML);
+            }, 50);
+        }
+
+        // Add Enter key listener layout support directly on input form fields
+        document.getElementById('chatInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') { executeChatGeneration(); }
+        });
 
         window.addEventListener('DOMContentLoaded', bootApp);
     </script>
